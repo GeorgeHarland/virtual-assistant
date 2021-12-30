@@ -17,16 +17,14 @@ import wikipedia
 listener = sr.Recognizer()
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
-engine.setProperty('voices', voices[0].id)
-engine.setProperty('rate',240)
+engine.setProperty('voices', voices[1].id)
+engine.setProperty('rate',220)
 
 run = True
 
 def talk(text):
     engine.say(text)
     engine.runAndWait()
-
-talk("Hello. I am Topaz. What can I do for you?")
 
 def take_command():
     try:
@@ -42,33 +40,44 @@ def take_command():
         pass
     return command
 
+def command_play(command):
+    vid = command.replace('play', '')
+    talk('Okay. Playing' + vid)
+    print('playing' + vid)
+    vid = command.replace('by', '')
+    pywhatkit.playonyt(vid, use_api = True)
+
+def command_time(command):
+    time = datetime.datetime.now().strftime('%I:%M %p')
+    print(time)
+    talk('The time right now is ' + time)
+
+def command_whatwho(command):
+    thing = command.replace('what is', '')
+    thing = command.replace('who is', '')
+    thing = command.replace('what are', '')
+    thing = command.replace('who are', '')
+    info = wikipedia.summary(thing, 1)
+    print(info)
+    talk(info)
+
 def run_assistant():
     command = take_command()
     print(command)
     if 'play' in command:
-        vid = command.replace('play', '')
-        talk('Okay. Playing' + vid)
-        print('playing' + vid)
-        vid = command.replace('by', '')
-        pywhatkit.playonyt(vid, use_api = True)
+        command_play(command)
     elif 'time' in command:
-        time = datetime.datetime.now().strftime('%I:%M %p')
-        print(time)
-        talk('The time right now is ' + time)
+        command_time(command)
     elif ('who' in command) or ('what' in command):
-        thing = command.replace('what is', '')
-        thing = command.replace('who is', '')
-        thing = command.replace('what are', '')
-        thing = command.replace('who are', '')
-        info = wikipedia.summary(thing, 1)
-        print(info)
-        talk(info)
+        command_whatwho(command)
     elif 'thank you' in command:
         talk("Thank you. Goodbye.")
         return False
     else:
         talk("Please say that again.")
     return True
+
+talk("Hello. I am Topaz. What can I do for you?")
 
 while(run == True):
     run = run_assistant()
