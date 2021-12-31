@@ -3,7 +3,7 @@ virtual_assistant.py
 A basic virtual assistant called Topaz that utilizes text to speech and microphone input.
 Commands: print, play, time, who/what, thank you (exit)
 GH
-last update: 28/12
+last update: 31/12
 '''
 
 # To start, followed: https://www.youtube.com/watch?v=AWvsXxDtEkU&list=WL&index=22&t=50s
